@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory List</title>
+  <!-- Add any additional styles or links to external stylesheets here -->
+  <link rel="stylesheet" href="/styles/home.css">
+  <link rel="stylesheet" href="/styles/inventory.css">
+</head>
+<body>
+  <header>
+    <h1>Inventory List</h1>
+    <a href="/logout">Logout</a>
+  </header>
+  <div class="container">
+    <% if (items && items.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Name</th>
+            <th>Cuisine</th>
+            <th>Phone</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(item => { %>
+            <tr>
+              <td><%= item.restaurantID %></td>
+              <td><%= item.name %></td>
+              <td><%= item.cuisine %></td>
+              <td><%= item.phone %></td>
+              <td><%= item.description %></td>
+              <td>
+                <a href="/details?_id=<%= item._id %>">Details</a>
+                <a href="/edit?_id=<%= item._id %>">Edit</a>
+                <a href="/delete?_id=<%= item._id %>">Delete</a>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>No items found in the inventory.</p>
+    <% } %>
+  </div>
+  <!-- Add any additional HTML elements or links here -->
+</body>
+</html>

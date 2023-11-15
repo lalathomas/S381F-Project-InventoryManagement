@@ -1,0 +1,37 @@
+/* styles/dashboard.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+  }
+  
+  .widget {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    width: 45%;
+  }
+  
+  a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  

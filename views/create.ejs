@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Inventory Item</title>
+  <!-- Add any additional styles or links to external stylesheets here -->
+  <link rel="stylesheet" href="/styles/home.css">
+  <link rel="stylesheet" href="/styles/form.css">
+</head>
+<body>
+  <header>
+    <h1>Create Inventory Item</h1>
+    <a href="/logout">Logout</a>
+  </header>
+  <div class="container">
+    <form method="post" action="/create">
+      <label for="restaurantID">Item ID:</label>
+      <input type="text" id="restaurantID" name="restaurantID" required>
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="cuisine">Cuisine:</label>
+      <input type="text" id="cuisine" name="cuisine" required>
+
+      <label for="phone">Phone:</label>
+      <input type="text" id="phone" name="phone" required>
+
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" rows="4" required></textarea>
+
+      <label for="borough">Borough:</label>
+      <input type="text" id="borough" name="borough" required>
+
+      <label for="street">Street:</label>
+      <input type="text" id="street" name="street">
+
+      <button type="submit">Create Item</button>
+    </form>
+  </div>
+  <!-- Add any additional HTML elements or links here -->
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Inventory Item</title>
+  <!-- Add any additional styles or links to external stylesheets here -->
+  <link rel="stylesheet" href="/styles/home.css">
+  <link rel="stylesheet" href="/styles/form.css">
+</head>
+<body>
+  <header>
+    <h1>Edit Inventory Item</h1>
+    <a href="/logout">Logout</a>
+  </header>
+  <div class="container">
+    <form method="post" action="/update">
+      <input type="hidden" name="postId" value="<%= item.restaurantID %>">
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" value="<%= item.name %>" required>
+
+      <label for="cuisine">Cuisine:</label>
+      <input type="text" id="cuisine" name="cuisine" value="<%= item.cuisine %>" required>
+
+      <label for="phone">Phone:</label>
+      <input type="text" id="phone" name="phone" value="<%= item.phone %>" required>
+
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" rows="4" required><%= item.description %></textarea>
+
+      <label for="borough">Borough:</label>
+      <input type="text" id="borough" name="borough" value="<%= item.address ? item.address.borough : '' %>" required>
+
+      <label for="street">Street:</label>
+      <input type="text" id="street" name="street" value="<%= item.address ? item.address.street : '' %>">
+
+      <button type="submit">Update Item</button>
+    </form>
+  </div>
+  <!-- Add any additional HTML elements or links here -->
+</body>
+</html>
