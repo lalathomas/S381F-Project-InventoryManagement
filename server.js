@@ -2,44 +2,19 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('cookie-session');
 const mongoose = require('mongoose');
+const csrf = require('csurf');
 const ObjectId = mongoose.Types.ObjectId;
 const SECRET_KEY = 'your-secret-key';
 const app = express();
 const PORT = process.env.PORT || 3000;
-// MongoDB setup
+const usersInfo = [
+  { username: "user1", password: "password1" },
+  { username: "user2", password: "password2" },
+  { username: "lala", password: "lala" },
+  // Add more users as needed
+];
 // MongoDB setup
 const MONGODB_URI = 'mongodb+srv://thomaslaw:lala1120@cluster0.rreryim.mongodb.net/inventoryDB?retryWrites=true&w=majority';
-
-
-
-const usersInfo = [
-    { username: "user1", password: "password1" },
-    { username: "user2", password: "password2" },
-    // Add more users as needed
-  ];
-  
-app.set('view engine', 'ejs');
-app.use(session({
-  name: 'session',
-  secret: SECRET_KEY,
-  maxAge: 24 * 60 * 60 * 1000, // 24 hours
-}));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public')); // Create a 'public' folder for static files (e.g., CSS, images)
-
-// MongoDB setup
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// Define MongoDB schema and model for inventory items
-
-const inventorySchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  quantity: Number,
-  // Add other fields as needed
-}, { collection: 'inventoryItems' }); // Specify the collection name here
-
-const InventoryItem = mongoose.model('InventoryItem', inventorySchema);
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -48,6 +23,27 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connected to MongoDB');
 });
+
+// Define MongoDB schema and model for inventory items
+const inventorySchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  quantity: Number,
+}, { collection: 'inventoryItems' }); // Specify the collection name here
+
+const InventoryItem = mongoose.model('InventoryItem', inventorySchema);
+
+// CSRF setup
+const csrfProtection = csrf({ cookie: true });
+
+app.set('view engine', 'ejs');
+app.use(session({
+  name: 'session',
+  secret: SECRET_KEY,
+  maxAge: 24 * 60 * 60 * 1000, // 24 hours
+}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 // Routes
 app.get('/', (req, res) => {
@@ -241,7 +237,59 @@ app.get('/home', (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
-  
+  // server.js
+
+// Add a route for handling the editing form submission
+app.post('/inventory/:id/edit', async (req, res) => {
+  // Check if the user is authenticated
+  if (!req.session.authenticated) {
+    return res.redirect('/login');
+  }
+
+  const itemId = req.params.id;
+  const { name, description, quantity } = req.body;
+
+  try {
+    const inventoryItem = await InventoryItem.findById(itemId);
+    if (!inventoryItem) {
+      return res.status(404).send('Item not found');
+    }
+
+    // Update the inventory item
+    inventoryItem.name = name;
+    inventoryItem.description = description;
+    inventoryItem.quantity = quantity;
+
+    await inventoryItem.save();
+
+    // Redirect to the inventory list
+    res.redirect('/inventory');
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+});
+// Edit route
+app.get('/inventory/:id/edit', csrfProtection, async (req, res) => {
+  if (!req.session.authenticated) {
+    return res.redirect('/login');
+  }
+
+  const itemId = req.params.id;
+
+  try {
+    const inventoryItem = await InventoryItem.findById(itemId);
+    if (!inventoryItem) {
+      return res.status(404).send('Item not found');
+    }
+
+    // Pass csrfToken to the view
+    res.render('edit', { inventoryItem, csrfToken: req.csrfToken() });
+  } catch (error) {
+    console.error('Error rendering edit page:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
