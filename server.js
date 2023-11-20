@@ -30,10 +30,13 @@ const inventorySchema = new mongoose.Schema({
   name: String,
   description: String,
   quantity: Number,
-}, { collection: 'inventoryItems' }); // Specify the collection name here
+}, { collection: 'inventoryItems' }); 
+
+
+// Create a text index on the 'name' field
+inventorySchema.index({ name: 'text' });
 
 const InventoryItem = mongoose.model('InventoryItem', inventorySchema);
-
 // CSRF setup
 //app.use(cookieParser());
 //const csrf = require('csurf');
@@ -105,8 +108,12 @@ app.get('/dashboard', async (req, res) => {
 
 
 // CRUD operations
+//app.get('/inventory before
+/*app.get('/inventory', async (req, res) => {
+  if (!req.session.authenticated) {
+    return res.redirect('/login');
+  }
 
-app.get('/inventory', async (req, res) => {
   try {
     const inventoryItems = await InventoryItem.find();
     console.log('Inventory Items:', inventoryItems); // Add this line for debugging
@@ -115,8 +122,32 @@ app.get('/inventory', async (req, res) => {
     console.error('Error fetching inventory items:', error);
     res.status(500).send('Internal Server Error');
   }
-});
+});*/
+app.get('/inventory', async (req, res) => {
+  if (!req.session.authenticated) {
+    return res.redirect('/login');
+  }
 
+  try {
+    // Fetch regular inventory items
+    const items = await InventoryItem.find();
+
+    // Fetch search results (if a search query is provided)
+    const query = req.query.q;
+    let searchResults = [];
+    if (query) {
+      searchResults = await InventoryItem.find({ $text: { $search: query } });
+    }
+
+    console.log('Inventory Items:', items); // Add this line for debugging
+
+    // Render HTML for the inventory page, including search results
+    res.render('inventory', { items, searchResults, searchQuery: query });
+  } catch (error) {
+    console.error('Error fetching inventory items:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
 app.get('/inventory/:id', async (req, res) => {
@@ -169,45 +200,17 @@ app.delete('/inventory/:id', async (req, res) => {
 });
 
 // RESTful API
-app.get('/api/inventory', async (req, res) => {
-  try {
-    const inventoryItems = await InventoryItem.find();
-    res.json(inventoryItems);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.post('/api/inventory', async (req, res) => {
-  const { name, description, quantity } = req.body;
+app.get('/api/inventory/search', async (req, res) => {
+  const query = req.query.q; // Retrieve the query parameter from the request
 
   try {
-    const newItem = await InventoryItem.create({ name, description, quantity });
-    res.status(201).json(newItem);
+    // Use Mongoose or your database query to search for items based on the query parameter
+    const searchResults = await InventoryItem.find({ $text: { $search: query } });
+
+    // Return the search results as JSON
+    res.json(searchResults);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.put('/api/inventory/:id', async (req, res) => {
-  const itemId = req.params.id;
-  const { name, description, quantity } = req.body;
-
-  try {
-    const updatedItem = await InventoryItem.findByIdAndUpdate(itemId, { name, description, quantity }, { new: true });
-    res.json(updatedItem);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.delete('/api/inventory/:id', async (req, res) => {
-  const itemId = req.params.id;
-
-  try {
-    await InventoryItem.findByIdAndDelete(itemId);
-    res.status(204).end();
-  } catch (error) {
+    console.error('Error searching inventory:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

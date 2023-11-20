@@ -15,47 +15,150 @@
     <a href="/logout">Logout</a>
   </header>
   
-    <div class="container">
-      <% if (items && items.length > 0) { %>
-        <table>
-          <thead>
+  <div class="container">
+    <!-- Add a search form -->
+    <form id="searchForm" onsubmit="performSearch(); return false;">
+      <label for="search">Search:</label>
+      <input type="text" id="search" name="q" placeholder="Enter your search query">
+      <button type="button" onclick="performSearch()">Search</button>
+    </form>
+
+    <% if (searchQuery) { %>
+      <h2>Search Results for "<%= searchQuery %>"</h2>
+    <% } %>
+
+    <% if (items && items.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Action</th> <!-- Add a new column for actions -->
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(item => { %>
             <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Quantity</th>
-              <th>Action</th> <!-- Add a new column for actions -->
+              <td><%= item.name %></td>
+              <td><%= item.description %></td>
+              <td><%= item.quantity %></td>
+              <td>
+                <!-- Add a link/button to edit the item -->
+                <a href="/inventory/<%= item._id %>/edit">Edit</a>
+                <a href="#" onclick="deleteItem('<%= item._id %>')">Delete</a>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <% items.forEach(item => { %>
-              <tr>
-                <td><%= item.name %></td>
-                <td><%= item.description %></td>
-                <td><%= item.quantity %></td>
-                <td>
-                  <!-- Add a link/button to edit the item -->
-                  <a href="/inventory/<%= item._id %>/edit">Edit</a>
-                  <a href="#" onclick="deleteItem('<%= item._id %>')">Delete</a>
-                </td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      <% } else { %>
-        <p>No items available.</p>
-      <% } %>
-    </div>
-    <!-- Add any additional HTML elements or links here -->
-  </body>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else if (searchResults && searchResults.length > 0) { %>
+      <!-- Display search results as a table -->
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Action</th> <!-- Add a new column for actions -->
+          </tr>
+        </thead>
+        <tbody>
+          <% searchResults.forEach(item => { %>
+            <tr>
+              <td><%= item.name %></td>
+              <td><%= item.description %></td>
+              <td><%= item.quantity %></td>
+              <td>
+                <!-- Add a link/button to edit the item -->
+                <a href="/inventory/<%= item._id %>/edit">Edit</a>
+                <a href="#" onclick="deleteItem('<%= item._id %>')">Delete</a>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>No items available.</p>
+    <% } %>
+  </div>
   <!-- Add any additional HTML elements or links here -->
-</body>
-</html>
-<script>
-  function deleteItem(itemId) {
-    if (confirm('Are you sure you want to delete this item?')) {
-      fetch(`/api/inventory/${itemId}`, {
-        method: 'DELETE',
-      })
+
+  <script>
+   // Function to render search results in the table
+  function renderSearchResults(results) {
+    const tableBody = document.querySelector('tbody');
+
+    // Clear existing rows
+    tableBody.innerHTML = '';
+
+    // Render each result as a table row
+    results.forEach(result => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${result.name}</td>
+        <td>${result.description}</td>
+        <td>${result.quantity}</td>
+        <td>
+          <a href="/inventory/${result._id}/edit">Edit</a>
+          <a href="#" onclick="deleteItem('${result._id}')">Delete</a>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  // Function to handle search form submission
+  async function handleSearchForm(event) {
+    event.preventDefault();
+
+    const searchInput = document.getElementById('search');
+    const searchTerm = searchInput.value;
+
+    // Perform the search
+    const response = await fetch(`/api/inventory/search?q=${searchTerm}`);
+    const results = await response.json();
+
+    // Render the search results in the table
+    renderSearchResults(results);
+
+    // Add a message to show the search term
+    const searchMessage = document.createElement('p');
+    searchMessage.textContent = `Search results for: ${searchTerm}`;
+
+    // Append the message after the table
+    document.querySelector('.container').appendChild(searchMessage);
+  }
+
+
+    function deleteItem(itemId) {
+      if (confirm('Are you sure you want to delete this item?')) {
+        fetch(`/api/inventory/${itemId}`, {
+          method: 'DELETE',
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Handle success, e.g., refresh the page or update the UI
+            console.log('Item deleted successfully:', data);
+            window.location.reload(); // Refresh the page
+          })
+          .catch(error => {
+            // Handle errors
+            console.error('Error deleting item:', error);
+          });
+      }
+    }
+
+    function performSearch() {
+      const searchForm = document.getElementById('searchForm');
+      const formData = new FormData(searchForm);
+
+      fetch(`/api/inventory/search?${new URLSearchParams(formData).toString()}`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -63,15 +166,53 @@
           return response.json();
         })
         .then(data => {
-          // Handle success, e.g., refresh the page or update the UI
-          console.log('Item deleted successfully:', data);
-          window.location.reload(); // Refresh the page
+          // Update the page with the search results
+          const searchResultsContainer = document.querySelector('.container');
+          searchResultsContainer.innerHTML = ''; // Clear existing content
+
+          if (data && data.length > 0) {
+            // Display search results as a table
+            const table = document.createElement('table');
+            table.innerHTML = `
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Action</th> <!-- Add a new column for actions -->
+                </tr>
+              </thead>
+              <tbody>
+                ${data.map(item => `
+                  <tr>
+                    <td>${item.name}</td>
+                    <td>${item.description}</td>
+                    <td>${item.quantity}</td>
+                    <td>
+                      <!-- Add a link/button to edit the item -->
+                      <a href="/inventory/${item._id}/edit">Edit</a>
+                      <a href="#" onclick="deleteItem('${item._id}')">Delete</a>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            `;
+            searchResultsContainer.appendChild(table);
+
+            // Display the search keyword
+            const searchKeyword = document.createElement('p');
+            searchKeyword.textContent = `Search results for "${formData.get('q')}"`;
+            searchResultsContainer.insertBefore(searchKeyword, table);
+          } else {
+            // No search results
+            searchResultsContainer.innerHTML = '<p>No items available.</p>';
+          }
         })
         .catch(error => {
           // Handle errors
-          console.error('Error deleting item:', error);
+          console.error('Error searching inventory:', error);
         });
     }
-    window.location.reload();
-  }
-</script>
+  </script>
+</body>
+</html>
