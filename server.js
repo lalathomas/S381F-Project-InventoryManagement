@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('cookie-session');
 const mongoose = require('mongoose');
-const csrf = require('csurf');
+const cookieParser = require('cookie-parser');
+
 const ObjectId = mongoose.Types.ObjectId;
 const SECRET_KEY = 'your-secret-key';
 const app = express();
@@ -34,7 +35,12 @@ const inventorySchema = new mongoose.Schema({
 const InventoryItem = mongoose.model('InventoryItem', inventorySchema);
 
 // CSRF setup
-const csrfProtection = csrf({ cookie: true });
+//app.use(cookieParser());
+//const csrf = require('csurf');
+//const csrfProtection = csrf({ cookie: true });
+//app.use(csrfProtection);
+
+
 
 app.set('view engine', 'ejs');
 app.use(session({
@@ -205,6 +211,17 @@ app.delete('/api/inventory/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+// Delete an inventory item by ID
+app.delete('/api/inventory/:id', async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    await InventoryItem.findByIdAndDelete(itemId);
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 app.get('/home', (req, res) => {
     // Check if the user is authenticated
@@ -239,15 +256,14 @@ app.get('/home', (req, res) => {
   });
   // server.js
 
-// Add a route for handling the editing form submission
-app.post('/inventory/:id/edit', async (req, res) => {
-  // Check if the user is authenticated
+
+// Edit route
+app.get('/inventory/:id/edit', async (req, res) => {
   if (!req.session.authenticated) {
     return res.redirect('/login');
   }
 
   const itemId = req.params.id;
-  const { name, description, quantity } = req.body;
 
   try {
     const inventoryItem = await InventoryItem.findById(itemId);
@@ -255,37 +271,38 @@ app.post('/inventory/:id/edit', async (req, res) => {
       return res.status(404).send('Item not found');
     }
 
-    // Update the inventory item
-    inventoryItem.name = name;
-    inventoryItem.description = description;
-    inventoryItem.quantity = quantity;
-
-    await inventoryItem.save();
-
-    // Redirect to the inventory list
-    res.redirect('/inventory');
+    res.render('edit', { inventoryItem });
   } catch (error) {
+    console.error('Error rendering edit page:', error);
     res.status(500).send('Internal Server Error');
   }
 });
-// Edit route
-app.get('/inventory/:id/edit', csrfProtection, async (req, res) => {
-  if (!req.session.authenticated) {
-    return res.redirect('/login');
-  }
-
+app.post('/inventory/:id/edit', async (req, res) => {
+  // Extract the item ID from the request parameters
   const itemId = req.params.id;
 
   try {
-    const inventoryItem = await InventoryItem.findById(itemId);
-    if (!inventoryItem) {
+    // Retrieve the existing inventory item by ID
+    const existingItem = await InventoryItem.findById(itemId);
+
+    if (!existingItem) {
+      // If the item doesn't exist, return a 404 error
       return res.status(404).send('Item not found');
     }
 
-    // Pass csrfToken to the view
-    res.render('edit', { inventoryItem, csrfToken: req.csrfToken() });
+    // Update the existing item with the data from the form
+    existingItem.name = req.body.name;
+    existingItem.description = req.body.description;
+    existingItem.quantity = req.body.quantity;
+
+    // Save the updated item to the database
+    await existingItem.save();
+
+    // Redirect to the inventory details page for the updated item
+    res.redirect(`/inventory`);
   } catch (error) {
-    console.error('Error rendering edit page:', error);
+    // If an error occurs, return a 500 Internal Server Error
+    console.error('Error updating inventory item:', error);
     res.status(500).send('Internal Server Error');
   }
 });

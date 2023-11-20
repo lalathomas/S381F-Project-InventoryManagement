@@ -35,6 +35,7 @@
                 <td>
                   <!-- Add a link/button to edit the item -->
                   <a href="/inventory/<%= item._id %>/edit">Edit</a>
+                  <a href="#" onclick="deleteItem('<%= item._id %>')">Delete</a>
                 </td>
               </tr>
             <% }); %>
@@ -49,3 +50,28 @@
   <!-- Add any additional HTML elements or links here -->
 </body>
 </html>
+<script>
+  function deleteItem(itemId) {
+    if (confirm('Are you sure you want to delete this item?')) {
+      fetch(`/api/inventory/${itemId}`, {
+        method: 'DELETE',
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Handle success, e.g., refresh the page or update the UI
+          console.log('Item deleted successfully:', data);
+          window.location.reload(); // Refresh the page
+        })
+        .catch(error => {
+          // Handle errors
+          console.error('Error deleting item:', error);
+        });
+    }
+    window.location.reload();
+  }
+</script>

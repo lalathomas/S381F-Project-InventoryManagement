@@ -1,5 +1,3 @@
-<!-- edit.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,24 +12,19 @@
     <a href="/home">Home</a>
     <a href="/logout">Logout</a>
   </header>
-  <!-- Include hidden input for CSRF protection -->
-<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
   <div class="container">
     <form method="post" action="/inventory/<%= inventoryItem._id %>/edit">
-      <!-- Include hidden input for CSRF protection -->
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-
       <!-- Your form fields for editing an item -->
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" value="<%= inventoryItem.name %>" required>
-
+    
       <label for="description">Description:</label>
       <textarea id="description" name="description" required><%= inventoryItem.description %></textarea>
-
+    
       <label for="quantity">Quantity:</label>
       <input type="number" id="quantity" name="quantity" value="<%= inventoryItem.quantity %>" required>
-
+    
       <!-- Add a submit button -->
       <button type="submit">Save Changes</button>
     </form>
