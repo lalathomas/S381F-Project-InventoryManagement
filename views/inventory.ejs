@@ -11,22 +11,30 @@
 <body>
   <header>
     <h1>Inventory List</h1>
+    <a href="/home">Home</a>
     <a href="/logout">Logout</a>
   </header>
-  div class="container">
+  <div class="container">
     <% if (items && items.length > 0) { %>
+
       <!-- Add your table content here -->
       <table>
         <thead>
           <tr>
-            <!-- Add your table header content here -->
+            <th>Name</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <!-- Add more headers if needed -->
           </tr>
         </thead>
         <tbody>
           <% items.forEach(item => { %>
             <!-- Loop through items and display them in the table -->
             <tr>
-              <!-- Add your table row content here -->
+              <td><%= item.name %></td>
+              <td><%= item.description %></td>
+              <td><%= item.quantity %></td>
+              <!-- Add more cells if needed -->
             </tr>
           <% }); %>
         </tbody>
@@ -34,7 +42,6 @@
     <% } else { %>
       <p>No items available.</p>
     <% } %>
-  </div>
   </div>
   <!-- Add any additional HTML elements or links here -->
 </body>

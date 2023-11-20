@@ -3,11 +3,14 @@ const bodyParser = require('body-parser');
 const session = require('cookie-session');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
-
+const SECRET_KEY = 'your-secret-key';
 const app = express();
 const PORT = process.env.PORT || 3000;
-const SECRET_KEY = 'your-secret-key'; // Change this to a secure secret key
-const MONGODB_URI = 'mongodb://localhost:27017/your-database-name'; // Update with your MongoDB connection string
+// MongoDB setup
+// MongoDB setup
+const MONGODB_URI = 'mongodb+srv://thomaslaw:lala1120@cluster0.rreryim.mongodb.net/inventoryDB?retryWrites=true&w=majority';
+
+
 
 const usersInfo = [
     { username: "user1", password: "password1" },
@@ -28,14 +31,23 @@ app.use(express.static('public')); // Create a 'public' folder for static files 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Define MongoDB schema and model for inventory items
+
 const inventorySchema = new mongoose.Schema({
   name: String,
   description: String,
   quantity: Number,
   // Add other fields as needed
-});
+}, { collection: 'inventoryItems' }); // Specify the collection name here
 
 const InventoryItem = mongoose.model('InventoryItem', inventorySchema);
+
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB');
+});
 
 // Routes
 app.get('/', (req, res) => {
@@ -69,26 +81,41 @@ app.get('/logout', (req, res) => {
   res.redirect('/login');
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', async (req, res) => {
   // Check if the user is authenticated
   if (!req.session.authenticated) {
     return res.redirect('/login');
   }
 
-  // Implement dashboard logic (e.g., display user-specific information)
-  res.render('dashboard', { userid: req.session.userid });
-});
-
-// CRUD operations
-app.get('/inventory', async (req, res) => {
-  // Retrieve all inventory items from the database
   try {
-    const inventoryItems = await InventoryItem.find();
-    res.render('inventory', { inventoryItems });
+    // Fetch user-specific information from the database
+    const userInventoryItems = await InventoryItem.find({/* Add a condition to filter items if needed */});
+
+    // Render the dashboard with user-specific information
+    res.render('dashboard', { 
+      username: req.session.username, // Change userid to username
+      userInventoryItems: userInventoryItems,
+    });
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+// CRUD operations
+
+app.get('/inventory', async (req, res) => {
+  try {
+    const inventoryItems = await InventoryItem.find();
+    console.log('Inventory Items:', inventoryItems); // Add this line for debugging
+    res.render('inventory', { items: inventoryItems });
+  } catch (error) {
+    console.error('Error fetching inventory items:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 app.get('/inventory/:id', async (req, res) => {
   // Retrieve a specific inventory item by ID
@@ -191,6 +218,28 @@ app.get('/home', (req, res) => {
   
     // Render the home page with user-specific information
     res.render('home', { username: req.session.username });
+  });
+  
+  app.get('/create', (req, res) => {
+    // Check if the user is authenticated
+    if (!req.session.authenticated) {
+      return res.redirect('/login');
+    }
+  
+    // Render the create page
+    res.render('create');
+  });
+  
+  app.post('/inventory', async (req, res) => {
+    // Create a new inventory item
+    const { name, description, quantity } = req.body;
+  
+    try {
+      await InventoryItem.create({ name, description, quantity });
+      res.redirect('/inventory');
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
   });
   
 // Start the server

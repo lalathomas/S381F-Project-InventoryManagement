@@ -10,27 +10,23 @@
 </head>
 <body>
   <header>
-    <h1>Welcome to the Dashboard, <%= userid %>!</h1>
+    <h1>Welcome to the Dashboard, <%= username %>!</h1>
+    <a href="/home">Home</a>
     <a href="/logout">Logout</a>
   </header>
-  <div class="container">
-    <section class="widget">
-      <h2>Inventory Summary</h2>
-      <!-- Placeholder content for inventory summary -->
-      <p>Total Items: 100</p>
-      <p>Low Stock Items: 5</p>
-    </section>
+<!-- Your existing dashboard.ejs content -->
 
-    <section class="widget">
-      <h2>Recent Activity</h2>
-      <!-- Placeholder content for recent activity -->
-      <ul>
-        <li>Item added: Product A</li>
-        <li>Item updated: Product B</li>
-        <li>Item deleted: Product C</li>
-      </ul>
-    </section>
-  </div>
+<div class="user-inventory">
+  <h3>Your Inventory Items</h3>
+  <ul>
+    <% userInventoryItems.forEach(item => { %>
+      <li><%= item.name %> - <%= item.quantity %> units</li>
+    <% }); %>
+  </ul>
+</div>
+
+<!-- More content if needed -->
+
   <!-- Add any additional HTML elements or links here -->
 </body>
 </html>
