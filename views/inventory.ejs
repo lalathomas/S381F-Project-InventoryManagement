@@ -13,39 +13,28 @@
     <h1>Inventory List</h1>
     <a href="/logout">Logout</a>
   </header>
-  <div class="container">
+  div class="container">
     <% if (items && items.length > 0) { %>
+      <!-- Add your table content here -->
       <table>
         <thead>
           <tr>
-            <th>Item ID</th>
-            <th>Name</th>
-            <th>Cuisine</th>
-            <th>Phone</th>
-            <th>Description</th>
-            <th>Action</th>
+            <!-- Add your table header content here -->
           </tr>
         </thead>
         <tbody>
           <% items.forEach(item => { %>
+            <!-- Loop through items and display them in the table -->
             <tr>
-              <td><%= item.restaurantID %></td>
-              <td><%= item.name %></td>
-              <td><%= item.cuisine %></td>
-              <td><%= item.phone %></td>
-              <td><%= item.description %></td>
-              <td>
-                <a href="/details?_id=<%= item._id %>">Details</a>
-                <a href="/edit?_id=<%= item._id %>">Edit</a>
-                <a href="/delete?_id=<%= item._id %>">Delete</a>
-              </td>
+              <!-- Add your table row content here -->
             </tr>
           <% }); %>
         </tbody>
       </table>
     <% } else { %>
-      <p>No items found in the inventory.</p>
+      <p>No items available.</p>
     <% } %>
+  </div>
   </div>
   <!-- Add any additional HTML elements or links here -->
 </body>
