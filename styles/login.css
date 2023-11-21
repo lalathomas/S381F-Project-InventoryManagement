@@ -5,12 +5,16 @@ body {
 
 .main-head {
   height: 150px;
-  background: #FFF;
+  background-image: url("star.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 .sidenav {
   height: 100%;
-  background-color: #000;
+  background-image: url("star.jpg");
+  background-size: cover;
+  background-position: center;
   overflow-x: hidden;
   padding-top: 20px;
 }
