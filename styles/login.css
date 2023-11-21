@@ -1,44 +1,65 @@
 /* styles/login.css */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Lato", sans-serif;
 }
 
-.container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.main-head {
+  height: 150px;
+  background: #FFF;
 }
 
-h2 {
-  text-align: center;
+.sidenav {
+  height: 100%;
+  background-color: #000;
+  overflow-x: hidden;
+  padding-top: 20px;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
+.main {
+  padding: 0px 10px;
 }
 
-label {
-  margin-bottom: 5px;
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
 }
 
-input {
-  margin-bottom: 15px;
-  padding: 8px;
+@media screen and (max-width: 450px) {
+  .login-form {
+    margin-top: 10%;
+  }
 }
 
-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+@media screen and (min-width: 768px) {
+  .main {
+    margin-left: 40%;
+  }
+
+  .sidenav {
+    width: 40%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+  }
+
+  .login-form {
+    margin-top: 80%;
+  }
 }
 
-button:hover {
-  background-color: #45a049;
+.login-main-text {
+  margin-top: 20%;
+  padding: 60px;
+  color: #fff;
+}
+
+.login-main-text h2 {
+  font-weight: 300;
+}
+
+.btn-black {
+  background-color: #000 !important;
+  color: #fff;
 }
