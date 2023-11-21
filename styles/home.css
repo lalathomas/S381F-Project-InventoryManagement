@@ -55,4 +55,28 @@ body {
   background-color: #4caf50;
 }
   /* Add any additional styling specific to your home page */
-  
+  .blue-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.blue-button:hover {
+  background-color: #2980b9;
+}
+
+.red-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.red-button:hover {
+  background-color: #c0392b;
+}
