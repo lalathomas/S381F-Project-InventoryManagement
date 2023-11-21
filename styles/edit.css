@@ -1,39 +1,64 @@
-/* styles/edit.css */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  header {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  .container {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px;
-  }
-  
-  .widget {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 15px;
-    width: 45%;
-  }
-  
-  a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.widget {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  width: 45%;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.container form label {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.container form input,
+.container form textarea {
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.container form button {
+  margin-top: 10px;
+  font-size: 18px;
+  padding: 10px 20px;
+}
 
 .footer {
   background-color: #3c3c3c;
@@ -49,4 +74,3 @@ body {
   height: 5px;
   background-color: #4caf50;
 }
-  
