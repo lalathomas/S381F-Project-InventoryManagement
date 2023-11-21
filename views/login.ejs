@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <!-- Add any additional styles or links to external stylesheets here -->
-  <link rel="stylesheet" href="/home.css">
-  <link rel="stylesheet" href="/login.css">
+  <link rel="stylesheet" href="/styles/home.css">
+  <link rel="stylesheet" href="/styles/login.css">
 </head>
 <body>
   <div class="container">
@@ -14,18 +14,18 @@
     <% if (message) { %>
       <p class="message"><%= message %></p>
     <% } %>
-    <form method="post" action="/login">
-      
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
-      
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
-      
-      <button type="submit">Login</button>
+    <form class="login">
+      <div class="login__field">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="login__field">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button class="button login__submit" type="submit">Login</button>
     </form>
     <!-- Add any additional HTML elements or links here -->
   </div>
 </body>
 </html>
-
