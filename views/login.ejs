@@ -1,31 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <!-- Add any additional styles or links to external stylesheets here -->
-  <link rel="stylesheet" href="/styles/home.css">
-  <link rel="stylesheet" href="/styles/login.css">
+  <link rel="stylesheet" href="/path/to/login.css">
 </head>
 <body>
-  <div class="container">
-    <h2>Login</h2>
-    <% if (message) { %>
-      <p class="message"><%= message %></p>
-    <% } %>
-    <form class="login">
-      <div class="login__field">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+  <section>
+    <div class="signin">
+      <div class="content">
+        <h2>Login</h2>
+        <form class="form">
+          <div class="inputBox">
+            <input type="text" name="username" required>
+            <label>Username</label>
+          </div>
+          <div class="inputBox">
+            <input type="password" name="password" required>
+            <label>Password</label>
+          </div>
+          <div class="links">
+            <a href="#">Forgot password?</a>
+            <a href="#">Create an account</a>
+          </div>
+          <input type="submit" value="Login">
+        </form>
       </div>
-      <div class="login__field">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-      </div>
-      <button class="button login__submit" type="submit">Login</button>
-    </form>
-    <!-- Add any additional HTML elements or links here -->
-  </div>
+    </div>
+  </section>
 </body>
 </html>
