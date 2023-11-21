@@ -55,6 +55,7 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use('/styles', express.static(path.join(__dirname, 'styles')));
 
 // Routes
 app.get('/', (req, res) => {
@@ -316,3 +317,5 @@ app.post('/inventory/:id/edit', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
