@@ -40,55 +40,61 @@ p {
 }
 
 .footer {
-background-color: #3c3c3c;
-padding: 20px;
-text-align: center;
-position: fixed;
-bottom: 0;
-left: 0;
-width: 100%;
-color: white;
+  background-color: #3c3c3c;
+  padding: 20px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: white;
 }
 
 .color-block {
-height: 5px;
-background-color: #4caf50;
+  height: 5px;
+  background-color: #4caf50;
 }
-/* Add any additional styling specific to your home page */
+
 .blue-button {
-background-color: #3498db;
-color: white;
-border: none;
-padding: 10px 20px;
-margin-right: 10px;
-cursor: pointer;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .blue-button:hover {
-background-color: #2980b9;
+  background-color: #2980b9;
 }
 
 .red-button {
-background-color: #e74c3c;
-color: white;
-border: none;
-padding: 10px 20px;
-margin-right: 10px;
-cursor: pointer;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .red-button:hover {
-background-color: #c0392b;
+  background-color: #c0392b;
 }
+
 .photo-container {
-display: flex;
-justify-content: center;
-align-items: center;
-margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .photo-container img {
-width: 300px;
-height: auto;
-margin-right: 10px;
+  width: 300px;
+  height: auto;
+  margin-right: 10px;
+  object-fit: contain;
+}
+
+.photo-container img:first-child {
+  width: 400px;
 }
