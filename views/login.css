@@ -1,45 +1,67 @@
 /* styles/login.css */
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  .container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
+    font-family: Raleway, sans-serif;
+    background: linear-gradient(90deg, #C7C5F4, #776BCC);
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+h2 {
     text-align: center;
-  }
-  
-  form {
+    color: #fff;
+}
+
+form {
     display: flex;
     flex-direction: column;
-  }
-  
-  label {
+}
+
+label {
     margin-bottom: 5px;
-  }
-  
-  input {
+    color: #fff;
+}
+
+input {
     margin-bottom: 15px;
     padding: 8px;
-  }
-  
-  button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px;
     border: none;
-    border-radius: 5px;
+    border-bottom: 2px solid #D1D1D4;
+    background: none;
+    color: #fff;
+    font-weight: 700;
+    width: 100%;
+    transition: .2s;
+}
+
+input:active,
+input:focus,
+input:hover {
+    outline: none;
+    border-bottom-color: #6A679E;
+}
+
+button {
+    background: #fff;
+    color: #4C489D;
+    padding: 16px 20px;
+    border-radius: 26px;
+    border: 1px solid #D4D3E8;
+    text-transform: uppercase;
+    font-weight: 700;
+    width: 100%;
+    box-shadow: 0px 2px 2px #5C5696;
     cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
+    transition: .2s;
+}
+
+button:active,
+button:focus,
+button:hover {
+    border-color: #6A679E;
+    outline: none;
+}
