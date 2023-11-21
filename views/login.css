@@ -135,7 +135,7 @@ section .signin .content .form .links a:nth-child(2) {
 section .signin .content .form .inputBox input[type="submit"] {
   padding: 10px;
   background: #0f0;
-  color: #000;
+  color: #0f0;
   font-weight: 600;
   font-size: 1.35em;
   letter-spacing: 0.05em;
