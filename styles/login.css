@@ -5,14 +5,14 @@ body {
 
 .main-head {
   height: 150px;
-  background-image: url("star.jpg");
+  background-image: url("/star.jpg");
   background-size: cover;
   background-position: center;
 }
 
 .sidenav {
   height: 100%;
-  background-image: url("star.jpg");
+  background-image: url("/star.jpg");
   background-size: cover;
   background-position: center;
   overflow-x: hidden;
