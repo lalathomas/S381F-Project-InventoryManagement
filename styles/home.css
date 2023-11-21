@@ -89,12 +89,10 @@ p {
 }
 
 .photo-container img {
-  width: 300px;
+  width: 600px;
   height: auto;
   margin-right: 10px;
   object-fit: contain;
 }
 
-.photo-container img:first-child {
-  width: 400px;
-}
+
