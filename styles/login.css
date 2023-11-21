@@ -5,12 +5,12 @@ body {
 
 .main-head {
   height: 150px;
-  background-color: white;
+  background-color: black; /* 修改背景顏色為黑色 */
 }
 
 .sidenav {
   height: 100%;
-  background-color: black;
+  background-color: black; /* 修改背景顏色為黑色 */
   overflow-x: hidden;
   padding-top: 20px;
 }
