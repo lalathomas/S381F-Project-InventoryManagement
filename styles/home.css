@@ -80,3 +80,15 @@ body {
 .red-button:hover {
   background-color: #c0392b;
 }
+.photo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.photo-container img {
+  width: 300px;
+  height: auto;
+  margin-right: 10px;
+}
