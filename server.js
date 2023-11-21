@@ -4,6 +4,8 @@ const session = require('cookie-session');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 
+const path = require('path');
+
 const ObjectId = mongoose.Types.ObjectId;
 const SECRET_KEY = 'your-secret-key';
 const app = express();
@@ -42,7 +44,7 @@ const InventoryItem = mongoose.model('InventoryItem', inventorySchema);
 //const csrf = require('csurf');
 //const csrfProtection = csrf({ cookie: true });
 //app.use(csrfProtection);
-
+app.use(express.static(path.join(__dirname, 'styles')));
 
 
 app.set('view engine', 'ejs');
